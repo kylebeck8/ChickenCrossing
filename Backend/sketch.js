@@ -3,8 +3,14 @@ var yCor;
 var driveUp;
 var driveDown;
 var cars = [];
-
+var chicken;
 var scoreElem;
+
+function preload() {
+  chicken = loadImage('assets/chicken.jpg');
+  car_down = loadImage('assets/car_down.png');
+  //background = loadImage('assets/background.jpg');
+}
 
 function setup() {
   // put setup code here
@@ -21,7 +27,9 @@ function setup() {
 function draw() {
   // put drawing code here
   background(0);
-  rect(xCor, yCor, 40, 40, 20);
+  //image(background, 0, 0);
+  image(chicken, xCor, yCor);
+  drawSprites();
 
   for (var i=0; i<cars.length; i++) {
     cars[i].move();
@@ -61,7 +69,7 @@ function Driver(id) {
   };
 
   this.display = function() {
-    rect(this.x, this.y, this.w, this.h);
+    image(car_down, this.x, this.y);
   };
 }
 
