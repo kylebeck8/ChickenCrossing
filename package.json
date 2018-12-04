@@ -1,20 +1,13 @@
 {
   "name": "chickencrossing",
   "version": "1.0.0",
-  "description": "",
+  "private":true,
   "main": "Backend/server.js",
   "scripts": {
-    "start": "cd Backend/ && node server.js",
-    "postinstall": "cd Backend/ && npm install && cd ../"
+    "start": "cd Backend/ && node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kylebeck8/ChickenCrossing.git"
-  },
-  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/kylebeck8/ChickenCrossing/issues"
-  },
-  "homepage": "https://github.com/kylebeck8/ChickenCrossing#readme"
+  "dependencies": {
+    "Backend": "file:Backend"
+  }
 }
