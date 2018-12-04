@@ -5,7 +5,7 @@
   "main": "Backend/server.js",
   "scripts": {
     "start": "cd Backend/ && node server.js",
-    "postinstall": "cd Backend/ && npm install && cd .."
+    "postinstall": "cd Backend/ && npm install && cd ../"
   },
   "repository": {
     "type": "git",
