@@ -4,8 +4,8 @@
   "description": "",
   "main": "Backend/server.js",
   "scripts": {
-    "start": "cd Backend/ && sudo node server.js",
-    "postinstall": "cd Backend/ && sudo npm install && cd .."
+    "start": "cd Backend/ && node server.js",
+    "postinstall": "cd Backend/ && npm install && cd .."
   },
   "repository": {
     "type": "git",
