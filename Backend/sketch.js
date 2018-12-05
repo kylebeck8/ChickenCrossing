@@ -44,7 +44,11 @@ function draw() {
   drawSprites();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   camera.position.x += 0.25 /*chicken.position.x + 250*/;
+=======
+  camera.position.x = chicken.position.x + 250;
+>>>>>>> 2a166abcbfcfeb0e0bb29b26ed109e456de13536
 =======
   camera.position.x = chicken.position.x + 250;
 >>>>>>> 2a166abcbfcfeb0e0bb29b26ed109e456de13536
