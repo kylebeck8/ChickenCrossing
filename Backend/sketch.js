@@ -3,15 +3,19 @@ var yCor;
 var driveUp;
 var driveDown;
 var cars = [];
+var gameMap = [0, 0, 9, 9, 9];
 var chicken;
 var scoreElem;
 var maxScore = 0;
+var roadXPos = 0;
+var widthElement;
+var mapXPos = 0;
 
 function preload() {
   chickenPic = loadImage('assets/chicken.jpg');
-  carDown = loadImage('assets/car_down.png');
-  carUp = loadImage('assets/car_up.png');
-  //background = loadImage('assets/background.jpg');
+  carDownPic = loadImage('assets/car_down.png');
+  carUpPic = loadImage('assets/car_up.png');
+  roadPic = loadImage('assets/road.png');
 }
 
 function setup() {
@@ -25,6 +29,7 @@ function setup() {
   driveUp = height;
   driveDown = -90;
   yCor = height / 2;
+  widthElement = roadPic.width/2;
 
   chicken = createSprite(xCor, yCor);
   chicken.addImage(chickenPic);
@@ -33,10 +38,10 @@ function setup() {
     cars.push(new Driver(i));
     cars[i] = createSprite(cars[i].x, cars[i].y);
     if(cars[i].position.x % 100 == 0) {
-      cars[i].addImage(carUp);
+      cars[i].addImage(carUpPic);
     }
     else {
-      cars[i].addImage(carDown);
+      cars[i].addImage(carDownPic);
     }
 
   }
@@ -50,7 +55,26 @@ function setup() {
 function draw() {
   // put drawing code here
   background(0);
-  //image(background, 0, 0);
+  image(roadPic, roadXPos, 0, roadPic.width/2, roadPic.height/2);
+
+  //add roads
+  if ((camera.position.x + width) > mapXPos) {
+    for (var i=0; i<10; i++) {
+      gameMap.push(int(random(1,11)));
+      mapXPos += widthElement;
+      //console.log(camera.position.x);
+      //console.log(mapXPos);
+    }
+  }
+  //display roads in map
+  for (var i=0; i<gameMap.length; i++) {
+    //if (map[i] > 3) {
+      displayRoad(widthElement * i);
+    //} else {
+      //Display other element
+    //}
+  }
+
   drawSprites();
 
   camera.position.x += 0.25 /*chicken.position.x + 250*/;
@@ -86,6 +110,17 @@ function draw() {
   }
 }
 
+function MapElement() {
+  // choose random map element
+  var element = int(random(1, 11));
+  if (element > 3) {
+    //Add road to array
+
+  } else {
+    //Add grass to array
+  }
+}
+
 function Driver(id) {
   var x = floor(random(51, width))
   this.x = x + (50 - (x % 50));
@@ -114,4 +149,10 @@ function keyPressed() {
       break;
   }
   return false;
+}
+
+function displayRoad(roadXPos) {
+  image(roadPic, roadXPos, 0, widthElement, roadPic.height/2);
+  image(roadPic, roadXPos, roadPic.height/2, widthElement, roadPic.height/2);
+  image(roadPic, roadXPos, roadPic.height, widthElement, roadPic.height/2);
 }
