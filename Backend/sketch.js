@@ -5,6 +5,7 @@ var driveDown;
 var cars = [];
 var chicken;
 var scoreElem;
+var maxScore = 0;
 
 function preload() {
   chickenPic = loadImage('assets/chicken.jpg');
@@ -31,8 +32,17 @@ function setup() {
   for(var i = 0; i < 30; i++) {
     cars.push(new Driver(i));
     cars[i] = createSprite(cars[i].x, cars[i].y);
-    cars[i].addImage(car_down);
+    if(cars[i].position.x % 100 == 0) {
+      cars[i].addImage(carUp);
+    }
+    else {
+      cars[i].addImage(carDown);
+    }
+
   }
+
+  camera.position.x = chicken.position.x + 250;
+  camera.position.y = chicken.position.y;
 
   drawSprites();
 }
@@ -43,12 +53,9 @@ function draw() {
   //image(background, 0, 0);
   drawSprites();
 
-<<<<<<< HEAD
   camera.position.x += 0.25 /*chicken.position.x + 250*/;
-=======
-  camera.position.x = chicken.position.x + 250;
->>>>>>> 2a166abcbfcfeb0e0bb29b26ed109e456de13536
 
+  //moves cars
   for (var i=0; i<cars.length; i++) {
     if(cars[i].position.x % 100 == 0) {
       cars[i].velocity.y = -2;
@@ -63,8 +70,20 @@ function draw() {
     else if(cars[i].position.x % 100 != 0 && cars[i].position.y > height) {
       cars[i].position.y = -90;
     }
+
+    //check collisions
+    if(chicken.overlap(cars[i]) || chicken.position.x < 0) {
+      noLoop();
+      var scoreVal = parseInt(scoreElem.html().substring(8));
+      scoreElem.html('Game ended! Your score was : ' + scoreVal);
+    }
   }
-  checkCollision();
+
+  //check score
+  if(chicken.position.x > maxScore) {
+    maxScore = chicken.position.x;
+    scoreElem.html('Score = ' + maxScore / 50);
+  }
 }
 
 function Driver(id) {
@@ -72,49 +91,10 @@ function Driver(id) {
   this.x = x + (50 - (x % 50));
 
   if(this.x % 100 == 0) {
-    this.y = driveUp + (id * 90);
+    this.y = driveUp + (id * 130);
   }
   else {
-    this.y = driveDown - (id * 90);
-  }
-
-  this.w = 40;
-  var type = [50, 90];
-  this.h = random(type);
-<<<<<<< HEAD
-=======
-
-  this.move = function() {
-    if(this.x % 100 == 0) {
-      this.y -= 1;
-      if(this.y < -90) {
-        this.y = height;
-      }
-    }
-    else {
-      this.y += 1;
-      if(this.y > height) {
-        this.y = -90;
-      }
-    }
-  };
-
-  this.display = function() {
-    if(this.x % 100 == 0) {
-      image(carUp, this.x, this.y);
-    } else {
-      image(carDown, this.x, this.y);
-    }
-  };
->>>>>>> 2a166abcbfcfeb0e0bb29b26ed109e456de13536
-}
-
-function checkCollision() {
-  for (var i=0; i<cars.length; i++) {
-    if(xCor == cars[i].x && yCor == cars[i].y) {
-      xCor = 50;
-      yCor = height / 2;
-    }
+    this.y = driveDown - (id * 130);
   }
 }
 
