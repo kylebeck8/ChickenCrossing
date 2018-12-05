@@ -43,7 +43,11 @@ function draw() {
   //image(background, 0, 0);
   drawSprites();
 
+<<<<<<< HEAD
   camera.position.x += 0.25 /*chicken.position.x + 250*/;
+=======
+  camera.position.x = chicken.position.x + 250;
+>>>>>>> 2a166abcbfcfeb0e0bb29b26ed109e456de13536
 
   for (var i=0; i<cars.length; i++) {
     if(cars[i].position.x % 100 == 0) {
@@ -77,6 +81,32 @@ function Driver(id) {
   this.w = 40;
   var type = [50, 90];
   this.h = random(type);
+<<<<<<< HEAD
+=======
+
+  this.move = function() {
+    if(this.x % 100 == 0) {
+      this.y -= 1;
+      if(this.y < -90) {
+        this.y = height;
+      }
+    }
+    else {
+      this.y += 1;
+      if(this.y > height) {
+        this.y = -90;
+      }
+    }
+  };
+
+  this.display = function() {
+    if(this.x % 100 == 0) {
+      image(carUp, this.x, this.y);
+    } else {
+      image(carDown, this.x, this.y);
+    }
+  };
+>>>>>>> 2a166abcbfcfeb0e0bb29b26ed109e456de13536
 }
 
 function checkCollision() {
