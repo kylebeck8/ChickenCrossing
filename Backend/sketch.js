@@ -8,7 +8,8 @@ var scoreElem;
 
 function preload() {
   chickenPic = loadImage('assets/chicken.jpg');
-  car_down = loadImage('assets/car_down.png');
+  carDown = loadImage('assets/car_down.png');
+  carUp = loadImage('assets/car_up.png');
   //background = loadImage('assets/background.jpg');
 }
 
@@ -40,7 +41,7 @@ function draw() {
   //image(background, 0, 0);
   drawSprites();
 
-  camera.position.x = chicken.position.x + 300;
+  camera.position.x = chicken.position.x + 250;
 
   for (var i=0; i<cars.length; i++) {
     cars[i].move();
@@ -80,7 +81,11 @@ function Driver(id) {
   };
 
   this.display = function() {
-    image(car_down, this.x, this.y);
+    if(this.x % 100 == 0) {
+      image(carUp, this.x, this.y);
+    } else {
+      image(carDown, this.x, this.y);
+    }
   };
 }
 
