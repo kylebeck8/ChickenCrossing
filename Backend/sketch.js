@@ -2,13 +2,14 @@ var xCor = 50;
 var yCor;
 var driveUp;
 var driveDown;
-var cars = [];
 var chicken;
 var scoreElem;
+var cars = [];
 
 function preload() {
-  chicken = loadImage('assets/chicken.jpg');
-  car_down = loadImage('assets/car_down.png');
+  chickenPic = loadImage('assets/chicken.jpg');
+  carDownPic = loadImage('assets/car_down.png');
+  carUpPic = loadImage('assets/car_up.png');
   //background = loadImage('assets/background.jpg');
 }
 
@@ -18,6 +19,10 @@ function setup() {
   driveUp = height;
   driveDown = -90;
   yCor = height / 2;
+  background(0);
+
+  var chicken = createSprite(xCor, yCor);
+  chicken.addImage(chickenPic);
 
   for(var i = 0; i < 30; i++) {
     cars.push(new Driver(i));
@@ -26,9 +31,8 @@ function setup() {
 
 function draw() {
   // put drawing code here
-  background(0);
   //image(background, 0, 0);
-  image(chicken, xCor, yCor);
+
   drawSprites();
 
   for (var i=0; i<cars.length; i++) {
@@ -59,8 +63,7 @@ function Driver(id) {
       if(this.y < -90) {
         this.y = height;
       }
-    }
-    else {
+    } else {
       this.y += 1;
       if(this.y > height) {
         this.y = -90;
@@ -69,7 +72,13 @@ function Driver(id) {
   };
 
   this.display = function() {
-    image(car_down, this.x, this.y);
+    if(this.x % 100 == 0) {
+      //var carUp = createSprite(this.x, this.y);
+      //carUp.addImage(carUpPic)
+      image(carUpPic, this.x, this.y);
+    } else {
+      image(carDownPic, this.x, this.y);
+    }
   };
 }
 
@@ -85,16 +94,16 @@ function checkCollision() {
 function keyPressed() {
   switch (keyCode) {
     case 65: //left
-      xCor -= 50;
+      chicken.position.x -= 50;
       break;
     case 68: //right
-      xCor += 50;
+      chicken.position.x += 50;
       break;
     case 83: //up
-      yCor += 50;
+      chicken.position.y += 50;
       break;
     case 87: //down
-      yCor -= 50;
+      chicken.position.y -= 50;
       break;
   }
   return false;
