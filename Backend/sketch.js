@@ -7,7 +7,6 @@ var gameMap = [0, 0, 9, 9, 9];
 var chicken;
 var scoreElem;
 var maxScore = 0;
-var roadXPos = 0;
 var widthElement;
 var mapXPos = 0;
 
@@ -16,6 +15,7 @@ function preload() {
   carDownPic = loadImage('assets/car_down.png');
   carUpPic = loadImage('assets/car_up.png');
   roadPic = loadImage('assets/road.png');
+  grassPic = loadImage('assets/grass.jpg');
 }
 
 function setup() {
@@ -55,7 +55,7 @@ function setup() {
 function draw() {
   // put drawing code here
   background(0);
-  image(roadPic, roadXPos, 0, roadPic.width/2, roadPic.height/2);
+  //image(roadPic, roadXPos, 0, roadPic.width/2, roadPic.height/2);
 
   //add roads
   if ((camera.position.x + width) > mapXPos) {
@@ -68,16 +68,17 @@ function draw() {
   }
   //display roads in map
   for (var i=0; i<gameMap.length; i++) {
-    //if (map[i] > 3) {
-      displayRoad(widthElement * i);
-    //} else {
+    if (gameMap[i] > 3) {
+      DisplayMapElement(0, widthElement * i);
+    } else {
       //Display other element
-    //}
+      DisplayMapElement(1, widthElement * i);
+    }
   }
 
   drawSprites();
 
-  camera.position.x += 0.25 /*chicken.position.x + 250*/;
+  camera.position.x += 1 /*chicken.position.x + 250*/;
 
   //moves cars
   for (var i=0; i<cars.length; i++) {
@@ -110,14 +111,19 @@ function draw() {
   }
 }
 
-function MapElement() {
-  // choose random map element
-  var element = int(random(1, 11));
-  if (element > 3) {
-    //Add road to array
-
-  } else {
-    //Add grass to array
+function DisplayMapElement(element, location) {
+  //0 is road, 1 is grass, 2 is other
+  switch (element) {
+    case 0:
+      image(roadPic, location, 0, widthElement, roadPic.height/2);
+      image(roadPic, location, roadPic.height/2, widthElement, roadPic.height/2);
+      image(roadPic, location, roadPic.height, widthElement, roadPic.height/2);
+      break;
+    case 1:
+      image(grassPic, location, 0, widthElement, grassPic.height/2);
+      image(grassPic, location, grassPic.height/2, widthElement, grassPic.height/2);
+      image(grassPic, location, grassPic.height, widthElement, grassPic.height/2);
+      break;
   }
 }
 
@@ -149,10 +155,4 @@ function keyPressed() {
       break;
   }
   return false;
-}
-
-function displayRoad(roadXPos) {
-  image(roadPic, roadXPos, 0, widthElement, roadPic.height/2);
-  image(roadPic, roadXPos, roadPic.height/2, widthElement, roadPic.height/2);
-  image(roadPic, roadXPos, roadPic.height, widthElement, roadPic.height/2);
 }
