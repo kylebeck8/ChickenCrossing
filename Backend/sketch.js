@@ -7,7 +7,7 @@ var chicken;
 var scoreElem;
 
 function preload() {
-  chicken = loadImage('assets/chicken.jpg');
+  chickenPic = loadImage('assets/chicken.jpg');
   car_down = loadImage('assets/car_down.png');
   //background = loadImage('assets/background.jpg');
 }
@@ -24,17 +24,23 @@ function setup() {
   driveDown = -90;
   yCor = height / 2;
 
+  chicken = createSprite(xCor, yCor);
+  chicken.addImage(chickenPic);
+
   for(var i = 0; i < 30; i++) {
     cars.push(new Driver(i));
   }
+
+  drawSprites();
 }
 
 function draw() {
   // put drawing code here
   background(0);
   //image(background, 0, 0);
-  image(chicken, xCor, yCor);
   drawSprites();
+
+  camera.position.x = chicken.position.x + 300;
 
   for (var i=0; i<cars.length; i++) {
     cars[i].move();
@@ -90,16 +96,16 @@ function checkCollision() {
 function keyPressed() {
   switch (keyCode) {
     case 65: //left
-      xCor -= 50;
+      chicken.position.x -= 50;
       break;
     case 68: //right
-      xCor += 50;
+      chicken.position.x += 50;
       break;
     case 83: //up
-      yCor += 50;
+      chicken.position.y += 50;
       break;
     case 87: //down
-      yCor -= 50;
+      chicken.position.y -= 50;
       break;
   }
   return false;
