@@ -29,6 +29,8 @@ function setup() {
 
   for(var i = 0; i < 30; i++) {
     cars.push(new Driver(i));
+    cars[i] = createSprite(cars[i].x, cars[i].y);
+    cars[i].addImage(car_down);
   }
 
   drawSprites();
@@ -40,11 +42,22 @@ function draw() {
   //image(background, 0, 0);
   drawSprites();
 
-  camera.position.x = chicken.position.x + 300;
+  camera.position.x += 0.25 /*chicken.position.x + 250*/;
 
   for (var i=0; i<cars.length; i++) {
-    cars[i].move();
-    cars[i].display();
+    if(cars[i].position.x % 100 == 0) {
+      cars[i].velocity.y = -2;
+    }
+    else {
+      cars[i].velocity.y = 2;
+    }
+
+    if(cars[i].position.x % 100 == 0 && cars[i].position.y < -90) {
+      cars[i].position.y = height;
+    }
+    else if(cars[i].position.x % 100 != 0 && cars[i].position.y > height) {
+      cars[i].position.y = -90;
+    }
   }
   checkCollision();
 }
@@ -63,25 +76,6 @@ function Driver(id) {
   this.w = 40;
   var type = [50, 90];
   this.h = random(type);
-
-  this.move = function() {
-    if(this.x % 100 == 0) {
-      this.y -= 1;
-      if(this.y < -90) {
-        this.y = height;
-      }
-    }
-    else {
-      this.y += 1;
-      if(this.y > height) {
-        this.y = -90;
-      }
-    }
-  };
-
-  this.display = function() {
-    image(car_down, this.x, this.y);
-  };
 }
 
 function checkCollision() {
