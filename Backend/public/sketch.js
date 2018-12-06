@@ -25,6 +25,7 @@ var prompt;
 var cameraSpeed;
 var start;
 var leaderboardActive;
+var index = 0;
 
 var widthElement;
 var mapXPos;
@@ -83,12 +84,17 @@ function draw() {
     }
   }
 
+  if (gameMap.length > 20) {
+    gameMap.splice(0, 1);
+    index += 1;
+  }
+
   //display map
   for (var i=0; i<gameMap.length; i++) {
     if (gameMap[i] == 0) {
-      DisplayMapElement(0, widthElement * i);
+      DisplayMapElement(0, widthElement * (i + index));
     } else if (gameMap[i] == 1) {
-      DisplayMapElement(1, widthElement * i);
+      DisplayMapElement(1, widthElement * (i + index));
     }
   }
 
@@ -140,6 +146,14 @@ function draw() {
     }
   }
 
+  if (camera.position.x > cars[0].position.x + 700) {
+    cars.splice(0, 1);
+    direction.splice(0, 1);
+  }
+
+  //console.log(cars.length);
+  //console.log(gameMap.length);
+
   //check score
   if(chicken.position.x > maxScore && !collision) {
     maxScore = chicken.position.x - 40;
@@ -190,10 +204,11 @@ function AddCars() {
   var carType = floor(random(0, 2));
   var directionTemp = floor(random(0, 2));
   var yOffset = 0;
+  var yRand = floor(random(10, 21)) * 30;
   for (var i=0; i<amount; i++) {
     direction.push(directionTemp);
     cars.push(new Driver(cars.length, mapXPos+widthElement/4));
-    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yOffset);
+    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yRand + yOffset);
     if (carType == 0) {
       yOffset += 225;
     } else {
@@ -219,10 +234,11 @@ function AddCars() {
   carType = floor(random(0, 2));
   directionTemp = floor(random(0, 2));
   yOffset = 0;
+  yRand = floor(random(0, 11)) * 30;
   for (var i=0; i<amount; i++) {
     direction.push(directionTemp);
     cars.push(new Driver(cars.length, mapXPos+widthElement*3/4));
-    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yOffset);
+    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yRand + yOffset);
     if (carType == 0) {
       yOffset += 225;
     } else {
@@ -351,6 +367,7 @@ function reset() {
   leaderboardActive = false;
   mapXPos = 0;
   gameMap = [1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1];
+  index = 0;
 
   //here's where I try to make the array empty to reset it
   //cars.splice(0,cars.length);
