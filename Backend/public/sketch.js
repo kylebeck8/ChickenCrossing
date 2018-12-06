@@ -172,10 +172,11 @@ function AddCars() {
   var carType = floor(random(0, 2));
   var directionTemp = floor(random(0, 2));
   var yOffset = 0;
+  var yRand = floor(random(10, 21)) * 30;
   for (var i=0; i<amount; i++) {
     direction.push(directionTemp);
     cars.push(new Driver(cars.length, mapXPos+widthElement/4));
-    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yOffset);
+    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yRand + yOffset);
     if (carType == 0) {
       yOffset += 225;
     } else {
@@ -201,10 +202,11 @@ function AddCars() {
   carType = floor(random(0, 2));
   directionTemp = floor(random(0, 2));
   yOffset = 0;
+  yRand = floor(random(0, 11)) * 30;
   for (var i=0; i<amount; i++) {
     direction.push(directionTemp);
     cars.push(new Driver(cars.length, mapXPos+widthElement*3/4));
-    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yOffset);
+    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yRand + yOffset);
     if (carType == 0) {
       yOffset += 225;
     } else {
