@@ -64,6 +64,9 @@ function setup() {
 function draw() {
   // put drawing code here
   background(0);
+  if(start) {
+    scoreElem.style('color', 'white');
+  }
 
   //add roads and cars
   if ((camera.position.x + width) > mapXPos) {
@@ -358,7 +361,7 @@ function reset() {
   scoreElem = createDiv('Score = 0');
   scoreElem.position(20, 20);
   scoreElem.id = 'score';
-  scoreElem.style('color', 'white');
+  scoreElem.style('color', color(136, 180, 252));
 
   cameraSpeed = 0;
   maxScore = 0;
