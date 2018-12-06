@@ -80,7 +80,7 @@ function draw() {
 
   drawSprites();
 
-  camera.position.x += 3;
+  camera.position.x += 1;
 
   //moves cars
   for (var i=0; i<cars.length; i++) {
@@ -266,6 +266,10 @@ function reset() {
 
   //here's where I try to make the array empty to reset it
   //cars.splice(0,cars.length);
+  //direction.splice(0, direction.length);
+  for(var i = 0; i < direction.length; i++) {
+    direction.pop();
+  }
   for(var i = 0; i < cars.length; i++) {
     cars.pop();
   }
