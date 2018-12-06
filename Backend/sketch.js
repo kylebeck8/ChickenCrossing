@@ -1,9 +1,9 @@
-var xCor = 50;
+var xCor = 42;
 var yCor;
 var driveUp;
 var driveDown;
 var cars = [];
-var gameMap = [0, 0, 9, 9, 9];
+var gameMap = [0, 0, 9, 0, 9, 9, 0, 9, 9, 9, 0];
 var chicken;
 var scoreElem;
 var maxScore = 0;
@@ -25,11 +25,12 @@ function setup() {
   scoreElem.id = 'score';
   scoreElem.style('color', 'white');
 
-  createCanvas(700, 700);
+  createCanvas(screen.width, 700);
   driveUp = height;
   driveDown = -90;
   yCor = height / 2;
   widthElement = roadPic.width/2;
+  mapXPos = widthElement * 11;
 
   chicken = createSprite(xCor, yCor);
   chicken.addImage(chickenPic);
@@ -55,23 +56,23 @@ function setup() {
 function draw() {
   // put drawing code here
   background(0);
-  //image(roadPic, roadXPos, 0, roadPic.width/2, roadPic.height/2);
 
   //add roads
   if ((camera.position.x + width) > mapXPos) {
-    for (var i=0; i<10; i++) {
+    //console.log(camera.position.x);
+    //console.log(width);
+    //console.log(mapXPos);
+    for (var i=0; i<2; i++) {
       gameMap.push(int(random(1,11)));
       mapXPos += widthElement;
-      //console.log(camera.position.x);
-      //console.log(mapXPos);
     }
   }
-  //display roads in map
+  //display map
   for (var i=0; i<gameMap.length; i++) {
-    if (gameMap[i] > 3) {
+    if (gameMap[i] > 4 || ((i > 1) && gameMap[i - 1] < 5)) {
       DisplayMapElement(0, widthElement * i);
+      //spawn car on road
     } else {
-      //Display other element
       DisplayMapElement(1, widthElement * i);
     }
   }
@@ -106,8 +107,8 @@ function draw() {
 
   //check score
   if(chicken.position.x > maxScore) {
-    maxScore = chicken.position.x;
-    scoreElem.html('Score = ' + maxScore / 50);
+    maxScore = chicken.position.x - 42;
+    scoreElem.html('Score = ' + maxScore / (widthElement / 2));
   }
 }
 
@@ -142,16 +143,16 @@ function Driver(id) {
 function keyPressed() {
   switch (keyCode) {
     case 65: //left
-      chicken.position.x -= 50;
+      chicken.position.x -= widthElement/2;
       break;
     case 68: //right
-      chicken.position.x += 50;
+      chicken.position.x += widthElement/2;
       break;
     case 83: //up
-      chicken.position.y += 50;
+      chicken.position.y += widthElement/2;
       break;
     case 87: //down
-      chicken.position.y -= 50;
+      chicken.position.y -= widthElement/2;
       break;
   }
   return false;
