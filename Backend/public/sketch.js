@@ -1,22 +1,22 @@
-var xCor = 40;
+var xCor;
 var yCor;
 var driveUp;
 var driveDown;
 var cars = [];
-var direction = [];
+
 var chicken;
 var scoreElem;
 var maxScore;
-
+var collision;
 var input;
 var button;
 var prompt;
 
 var widthElement;
-var mapXPos = 0;
+var mapXPos;
 
 //0 is road, 1 is grass
-var gameMap = [1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1];
+var gameMap;
 //0 is up, 1 is down. Is in sync with cars[]
 var direction = [];
 
@@ -32,26 +32,12 @@ function preload() {
 
 function setup() {
   // put setup code here
-  scoreElem = createDiv('Score = 0');
-  scoreElem.position(20, 20);
-  scoreElem.id = 'score';
-  scoreElem.style('color', 'white');
-  maxScore = 1;
-
   createCanvas(screen.width, 700);
-  driveUp = height;
-  driveDown = -90;
-  yCor = height / 2;
-  widthElement = roadPic.width/2;
-  mapXPos = widthElement * 11;
 
   chicken = createSprite(xCor, yCor, chickenPic.width * 1.5, chickenPic.height * 1.5);
   chicken.addImage(chickenPic);
 
-  camera.position.x = chicken.position.x + 250;
-  camera.position.y = chicken.position.y;
-
-  drawSprites();
+  reset();
 }
 
 function draw() {
@@ -86,7 +72,7 @@ function draw() {
 
   drawSprites();
 
-  camera.position.x += 0.25;
+  camera.position.x += 3;
 
   //moves cars
   for (var i=0; i<cars.length; i++) {
@@ -107,27 +93,30 @@ function draw() {
     //check collisions
     if(chicken.overlap(cars[i]) || chicken.position.x < camera.position.x - screen.width / 2) {
       noLoop();
+      background(0);
       var scoreVal = parseInt(scoreElem.html().substring(8));
       scoreElem.html('Game ended! Your score was : ' + scoreVal);
 
       input = createInput();
-      input.position(camera.position.x, camera.position.y);
+      input.position(width / 2 - input.width / 2, height / 2);
 
       button = createButton('submit');
-      button.position(input.x + input.width, camera.position.y);
+      button.position(input.x + input.width, height / 2);
       button.mousePressed(sendScore);
 
       prompt = createElement('h2', 'what is your name?')
       prompt.style('color', 'white');
-      prompt.position(camera.position.x, camera.position.y - 60);
+      prompt.position(width / 2 - input.width / 2, height / 2 - 60);
 
       textAlign(CENTER);
       textSize(50);
+
+      collision = true;
     }
   }
 
   //check score
-  if(chicken.position.x > maxScore) {
+  if(chicken.position.x > maxScore && !collision) {
     maxScore = chicken.position.x - 40;
     scoreElem.html('Score = ' + maxScore / (widthElement / 2));
   }
@@ -169,8 +158,38 @@ function DisplayMapElement(element, location) {
 }
 
 function reset() {
-  // put setup code here
+  removeElements();
 
+  scoreElem = createDiv('Score = 0');
+  scoreElem.position(20, 20);
+  scoreElem.id = 'score';
+  scoreElem.style('color', 'white');
+
+  maxScore = 0;
+  collision = false;
+  mapXPos = 0;
+  gameMap = [1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1];
+
+  //here's where I try to make the array empty to reset it
+  //cars.splice(0,cars.length);
+  for(var i = 0; i < cars.length; i++) {
+    cars.pop();
+  }
+
+  driveUp = height;
+  driveDown = -90;
+  yCor = height / 2;
+  xCor = 40;
+  widthElement = roadPic.width/2;
+  mapXPos = widthElement * 11;
+
+  chicken.position.x = xCor;
+  chicken.position.y = yCor;
+
+  camera.position.x = chicken.position.x + (screen.width / 2 - 100);
+  camera.position.y = chicken.position.y;
+
+  drawSprites();
 }
 
 function sendScore() {
@@ -190,6 +209,9 @@ function sendScore() {
   xhttp.open("POST", "/records");
   xhttp.setRequestHeader('Content-type', 'application/json');
   xhttp.send(JSON.stringify(record));
+
+  reset();
+  loop();
 }
 
 function Driver(id, pos) {

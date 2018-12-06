@@ -23,18 +23,7 @@ app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
 
 app.use('/hello', helloRouter);
 app.use('/records', recordsRouter);
-/*
-const url = "mongodb+srv://Ryan:database@chickencluster-ygphw.mongodb.net/test?retryWrites=true"
-var MongoClient = require('mongodb').MongoClient;
-var myDBO;
 
-MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
-  if(err) throw err
-  console.log("Database opened!");
-  myDBO = db.db("ChickenBase");
-  console.log("Databse obj is " + myDBO);
-});
-*/
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
