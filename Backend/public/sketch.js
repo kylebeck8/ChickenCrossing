@@ -69,6 +69,8 @@ function draw() {
       if (gameMap[gameMap.length - 1] == 1) {
         gameMap.push(0);
         AddCars();
+      } else if (checkLastThreeSpaces()) {
+        gameMap.push(1);
       } else if (tile < 4) {
         gameMap.push(1);
       } else {
@@ -134,6 +136,16 @@ function draw() {
   if(chicken.position.x > maxScore) {
     maxScore = chicken.position.x - 40;
     scoreElem.html('Score = ' + maxScore / (widthElement / 2));
+  }
+}
+
+function checkLastThreeSpaces() {
+  if ((gameMap[gameMap.length - 1] == 0) && (gameMap[gameMap.length - 2] == 0)
+        && (gameMap[gameMap.length - 3] == 0))
+  {
+    return true;
+  } else {
+    return false;
   }
 }
 
