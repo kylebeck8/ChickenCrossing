@@ -13,6 +13,7 @@ var collision;
 var input;
 var button;
 var prompt;
+var cameraSpeed = 0;
 var start;
 
 var widthElement;
@@ -60,6 +61,8 @@ function draw() {
       if (gameMap[gameMap.length - 1] == 1) {
         gameMap.push(0);
         AddCars();
+      } else if (checkLastThreeSpaces()) {
+        gameMap.push(1);
       } else if (tile < 4) {
         gameMap.push(1);
       } else {
@@ -81,7 +84,10 @@ function draw() {
 
   drawSprites();
 
-  camera.position.x += 2;
+  camera.position.x += 0.5 + cameraSpeed;
+  if (camera.position.x % 200 == 0) {
+    cameraSpeed += 0.25
+  }
 
   //moves cars
   for (var i=0; i<cars.length; i++) {
@@ -92,11 +98,11 @@ function draw() {
       cars[i].velocity.y = 2;
     }
 
-    if(direction[i] == 0 && cars[i].position.y < -90) {
-      cars[i].position.y = height;
+    if(direction[i] == 0 && cars[i].position.y < -120) {
+      cars[i].position.y = height+60;
     }
-    else if(cars[i].position.x % 100 != 0 && cars[i].position.y > height) {
-      cars[i].position.y = -90;
+    else if(cars[i].position.x % 100 != 0 && cars[i].position.y > height + 60) {
+      cars[i].position.y = -120;
     }
 
     //check collisions
@@ -147,6 +153,16 @@ function draw() {
     startElem.style('font-size', 50 + 'px');
 
     noLoop()
+  }
+}
+
+function checkLastThreeSpaces() {
+  if ((gameMap[gameMap.length - 1] == 0) && (gameMap[gameMap.length - 2] == 0)
+        && (gameMap[gameMap.length - 3] == 0))
+  {
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -269,6 +285,7 @@ function reset() {
   scoreElem.id = 'score';
   scoreElem.style('color', 'white');
 
+  cameraSpeed = 0;
   maxScore = 0;
   collision = false;
   start = false;
@@ -277,12 +294,18 @@ function reset() {
 
   //here's where I try to make the array empty to reset it
   //cars.splice(0,cars.length);
+  //direction.splice(0, direction.length);
+  for(var i = 0; i < direction.length; i++) {
+    direction.pop();
+  }
   for(var i = 0; i < cars.length; i++) {
     cars.pop();
   }
 
-  driveUp = height;
-  driveDown = -90;
+  driveUp = height+60;
+  driveDown = -120;
+  yCor = height / 2;
+  xCor = 40;
   widthElement = roadPic.width/2;
   mapXPos = widthElement * 11;
   yCor = height / 2;
