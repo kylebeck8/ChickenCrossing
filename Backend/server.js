@@ -1,7 +1,29 @@
 var http = require('http');
 var path = require('path');
 var fs = require('fs');
+var express = require('express');
+var createError = require('http-errors');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+//var config = require('config');
 
+var bodyParser = require('body-parser');
+
+var app = express();
+
+var helloRouter = require('./routes/hello');
+var recordsRouter = require('./routes/records');
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json({ limit: '10gb' }));
+app.use(bodyParser.urlencoded({ limit: "10gb", extended: true }))
+
+app.use('/hello', helloRouter);
+app.use('/records', recordsRouter);
+/*
 const url = "mongodb+srv://Ryan:database@chickencluster-ygphw.mongodb.net/test?retryWrites=true"
 var MongoClient = require('mongodb').MongoClient;
 var myDBO;
@@ -12,42 +34,37 @@ MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
   myDBO = db.db("ChickenBase");
   console.log("Databse obj is " + myDBO);
 });
+*/
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
-function handleRequest(req, res) {
-  // What did we request?
-  var pathname = req.url;
+app.set('port', process.env.PORT || 8080);
 
-  // If blank let's ask for index.html
-  if (pathname == '/') {
-    pathname = '/index.html';
-  }
+app.use(function(req, res, next) {
+    next(createError(404));
+});
 
-  // Ok what's our file extension
-  var ext = path.extname(pathname);
+var httpServer = http.createServer(app);
 
-  // Map extension to file type
-  var typeExt = {
-    '.html': 'text/html',
-    '.js':   'text/javascript',
-    '.css':  'text/css'
-  };
+httpServer.listen(app.get('port'), function() {
+    console.log('Server listing on port ' + app.get('port'));
+});
 
-  // What is it?  Default to plain text
-  var contentType = typeExt[ext] || 'text/plain';
+// error handler
+app.use(function(err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // Now read and write back the file with the appropriate content type
-  fs.readFile(__dirname + pathname,
-    function (err, data) {
-      if (err) {
-        res.writeHead(500);
-        return res.end('Error loading ' + pathname);
-      }
-      // Dynamically setting content type
-      res.writeHead(200,{ 'Content-Type': contentType });
-      res.end(data);
-    }
-  );
-}
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+});
 
+module.exports = app;
+
+/*
 var server = http.createServer(handleRequest);
 server.listen(process.env.PORT || 8080);
+*/
