@@ -104,7 +104,7 @@ function draw() {
   drawSprites();
 
   camera.position.x += 0.5 + cameraSpeed;
-  if (camera.position.x % 200 == 0) {
+  if (camera.position.x % 100 == 0) {
     cameraSpeed += 0.25
   }
 
@@ -233,7 +233,11 @@ function AddCars() {
   }
 
   //second section
-  amount = floor(random(0, 4));
+  if (amount == 0) {
+    amount = floor(random(2, 4));
+  } else {
+    amount = floor(random(0, 4));
+  }
   carType = floor(random(0, 2));
   directionTemp = floor(random(0, 2));
   yOffset = 0;
