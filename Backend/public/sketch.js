@@ -28,6 +28,8 @@ function preload() {
   carUpPic = loadImage('assets/car_up.png');
   roadPic = loadImage('assets/road.png');
   grassPic = loadImage('assets/grass.jpg');
+  truckUpPic = loadImage('assets/truck_up.png');
+  truckDownPic = loadImage('assets/truck_down.png');
 }
 
 function setup() {
@@ -45,7 +47,7 @@ function setup() {
   widthElement = roadPic.width/2;
   mapXPos = widthElement * 11;
 
-  chicken = createSprite(xCor, yCor, chickenPic.width * 1.5, chickenPic.height * 1.5);
+  chicken = createSprite(xCor, yCor);
   chicken.addImage(chickenPic);
 
   camera.position.x = chicken.position.x + 250;
