@@ -87,7 +87,7 @@ function draw() {
 
   drawSprites();
 
-  camera.position.x += 1 /*chicken.position.x + 250*/;
+  camera.position.x += 0.25;
 
   //moves cars
   for (var i=0; i<cars.length; i++) {
@@ -106,7 +106,7 @@ function draw() {
     }
 
     //check collisions
-    if(chicken.overlap(cars[i]) || chicken.position.x < camera.position.x - 350) {
+    if(chicken.overlap(cars[i]) || chicken.position.x < camera.position.x - screen.width / 2) {
       noLoop();
       var scoreVal = parseInt(scoreElem.html().substring(8));
       scoreElem.html('Game ended! Your score was : ' + scoreVal);
