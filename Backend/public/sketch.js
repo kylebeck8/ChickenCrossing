@@ -15,6 +15,7 @@ var button;
 var prompt;
 var cameraSpeed = 0;
 var start;
+var index = 0;
 
 var widthElement;
 var mapXPos;
@@ -73,12 +74,17 @@ function draw() {
     }
   }
 
+  if (gameMap.length > 20) {
+    gameMap.splice(0, 1);
+    index += 1;
+  }
+
   //display map
   for (var i=0; i<gameMap.length; i++) {
     if (gameMap[i] == 0) {
-      DisplayMapElement(0, widthElement * i);
+      DisplayMapElement(0, widthElement * (i + index));
     } else if (gameMap[i] == 1) {
-      DisplayMapElement(1, widthElement * i);
+      DisplayMapElement(1, widthElement * (i + index));
     }
   }
 
@@ -129,6 +135,14 @@ function draw() {
       collision = true;
     }
   }
+
+  if (camera.position.x > cars[0].position.x + 700) {
+    cars.splice(0, 1);
+    direction.splice(0, 1);
+  }
+
+  //console.log(cars.length);
+  //console.log(gameMap.length);
 
   //check score
   if(chicken.position.x > maxScore && !collision) {
@@ -334,6 +348,7 @@ function reset() {
   start = false;
   mapXPos = 0;
   gameMap = [1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1];
+  index = 0;
 
   //here's where I try to make the array empty to reset it
   //cars.splice(0,cars.length);
