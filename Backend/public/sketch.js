@@ -56,8 +56,6 @@ function setup() {
 
   reset();
 
-  SpawnFirstCars();
-
   drawSprites();
 }
 
@@ -400,6 +398,8 @@ function reset() {
 
   camera.position.x = chicken.position.x + (screen.width / 2 - 200);
   camera.position.y = chicken.position.y;
+
+  SpawnFirstCars();
 
   getScores();
   drawSprites();
