@@ -524,14 +524,14 @@ function leaderboardScreen() {
 }
 
 function mouseClicked() {
-  if ((mouseX > width / 2 - 50 /*&& mouseX < width / 2*/) && (mouseY > (3 * (height / 4)) && mouseY < (7 * (height / 8)))) {
+  if ((mouseX > width / 2 - 50 /*&& mouseX < width / 2*/) && (mouseY > (3 * (height / 4)) && mouseY < (7 * (height / 8))) && !start) {
     titleElem.remove();
     startElem.remove();
     leaderElem.remove();
     start = true;
     loop();
   }
-  else if((mouseX > width / 2 - 130 /*&& mouseX < width / 2*/) && (mouseY > (7 * (height / 8)))) {
+  else if((mouseX > width / 2 - 130 /*&& mouseX < width / 2*/) && (mouseY > (7 * (height / 8))) && !start) {
     leaderboardScreen();
   }
   else if(((mouseX > 1 * (width / 7) + 50) && (mouseX < width / 2 - 130)) && (mouseY > 11 * (height / 12)) && leaderboardActive) {
