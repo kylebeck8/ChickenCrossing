@@ -11,6 +11,7 @@ var collision;
 var input;
 var button;
 var prompt;
+var cameraSpeed = 0;
 
 var widthElement;
 var mapXPos;
@@ -80,7 +81,10 @@ function draw() {
 
   drawSprites();
 
-  camera.position.x += 1;
+  camera.position.x += 0.5 + cameraSpeed;
+  if (camera.position.x % 200 == 0) {
+    cameraSpeed += 0.25
+  }
 
   //moves cars
   for (var i=0; i<cars.length; i++) {
@@ -91,11 +95,11 @@ function draw() {
       cars[i].velocity.y = 2;
     }
 
-    if(direction[i] == 0 && cars[i].position.y < -90) {
-      cars[i].position.y = height;
+    if(direction[i] == 0 && cars[i].position.y < -120) {
+      cars[i].position.y = height+60;
     }
-    else if(cars[i].position.x % 100 != 0 && cars[i].position.y > height) {
-      cars[i].position.y = -90;
+    else if(cars[i].position.x % 100 != 0 && cars[i].position.y > height + 60) {
+      cars[i].position.y = -120;
     }
 
     //check collisions
@@ -259,6 +263,7 @@ function reset() {
   scoreElem.id = 'score';
   scoreElem.style('color', 'white');
 
+  cameraSpeed = 0;
   maxScore = 0;
   collision = false;
   mapXPos = 0;
@@ -274,8 +279,8 @@ function reset() {
     cars.pop();
   }
 
-  driveUp = height;
-  driveDown = -90;
+  driveUp = height+60;
+  driveDown = -120;
   yCor = height / 2;
   xCor = 40;
   widthElement = roadPic.width/2;
