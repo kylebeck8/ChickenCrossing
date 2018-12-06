@@ -28,16 +28,22 @@ function preload() {
   carUpPic = loadImage('assets/car_up.png');
   roadPic = loadImage('assets/road.png');
   grassPic = loadImage('assets/grass.jpg');
+  truckUpPic = loadImage('assets/truck_up.png');
+  truckDownPic = loadImage('assets/truck_down.png');
 }
 
 function setup() {
   // put setup code here
   createCanvas(screen.width, 700);
 
-  chicken = createSprite(xCor, yCor, chickenPic.width * 1.5, chickenPic.height * 1.5);
+  chicken = createSprite(xCor, yCor);
   chicken.addImage(chickenPic);
 
   reset();
+
+  SpawnFirstCars();
+
+  drawSprites();
 }
 
 function draw() {
@@ -139,6 +145,82 @@ function AddCars() {
   } else {
     cars[cars.length-1].addImage(carDownPic);
   }
+}
+
+function SpawnFirstCars() {
+  //First road
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*9/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
+  cars[cars.length-1].addImage(carUpPic);
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*11/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y-150);
+  cars[cars.length-1].addImage(carUpPic);
+
+  //Second road
+  direction.push(1);
+  cars.push(new Driver(cars.length, widthElement*17/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
+  cars[cars.length-1].addImage(carDownPic);
+  direction.push(1);
+  cars.push(new Driver(cars.length, widthElement*17/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y+150);
+  cars[cars.length-1].addImage(carDownPic);
+  direction.push(1);
+  cars.push(new Driver(cars.length, widthElement*19/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y+100);
+  cars[cars.length-1].addImage(truckDownPic);
+  direction.push(1);
+  cars.push(new Driver(cars.length, widthElement*19/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y+300);
+  cars[cars.length-1].addImage(carDownPic);
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*21/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
+  cars[cars.length-1].addImage(carUpPic);
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*23/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
+  cars[cars.length-1].addImage(truckUpPic);
+
+  //Third road
+  direction.push(1);
+  cars.push(new Driver(cars.length, widthElement*29/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
+  cars[cars.length-1].addImage(truckDownPic);
+  direction.push(1);
+  cars.push(new Driver(cars.length, widthElement*29/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y+225);
+  cars[cars.length-1].addImage(truckDownPic);
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*33/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
+  cars[cars.length-1].addImage(truckUpPic);
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*33/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y-400);
+  cars[cars.length-1].addImage(carUpPic);
+  direction.push(1);
+  cars.push(new Driver(cars.length, widthElement*35/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
+  cars[cars.length-1].addImage(carDownPic);
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*37/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
+  cars[cars.length-1].addImage(carUpPic);
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*37/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y-150);
+  cars[cars.length-1].addImage(carUpPic);
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*39/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y-150);
+  cars[cars.length-1].addImage(truckUpPic);
+  direction.push(0);
+  cars.push(new Driver(cars.length, widthElement*39/4));
+  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y-375);
+  cars[cars.length-1].addImage(truckUpPic);
 }
 
 function DisplayMapElement(element, location) {
