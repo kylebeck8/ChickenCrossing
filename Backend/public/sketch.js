@@ -3,18 +3,28 @@ var yCor;
 var driveUp;
 var driveDown;
 var cars = [];
+var leaders = [];
+var playersElem = [];
+var positionsElem = [];
+var highScoresEleme = [];
 
 var chicken;
 var scoreElem;
 var titleElem;
 var startElem;
+var leaderElem;
+var rankElem;
+var nameElem;
+var recordElem;
+var backElem;
 var maxScore;
 var collision;
 var input;
 var button;
 var prompt;
-var cameraSpeed = 0;
+var cameraSpeed;
 var start;
+var leaderboardActive;
 
 var widthElement;
 var mapXPos;
@@ -140,6 +150,8 @@ function draw() {
     fill(color(136, 180, 252));
     rect(0, 0, width, height);
 
+    //scoreElem.remove();
+
     titleElem = createDiv('Chicken Crossing');
     titleElem.position(width / 3 - 50, (height / 4));
     titleElem.id = 'title';
@@ -151,6 +163,12 @@ function draw() {
     startElem.id = 'start';
     startElem.style('color', 'white');
     startElem.style('font-size', 50 + 'px');
+
+    leaderElem = createDiv('Leaderboard');
+    leaderElem.position(width / 2 - 130, 7 * (height / 8));
+    leaderElem.id = 'leader';
+    leaderElem.style('color', 'white');
+    leaderElem.style('font-size', 50 + 'px');
 
     noLoop()
   }
@@ -330,6 +348,7 @@ function reset() {
   maxScore = 0;
   collision = false;
   start = false;
+  leaderboardActive = false;
   mapXPos = 0;
   gameMap = [1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1];
 
@@ -358,6 +377,7 @@ function reset() {
   camera.position.x = chicken.position.x + (screen.width / 2 - 200);
   camera.position.y = chicken.position.y;
 
+  getScores();
   drawSprites();
 }
 
@@ -370,6 +390,9 @@ function sendScore() {
     };
 
   var name = input.value();
+  if(name === "") {
+    name = "Blank";
+  }
   var score = maxScore / (widthElement / 2) - 2;
   const record = {
     name: name,
@@ -384,6 +407,21 @@ function sendScore() {
   loop();
 }
 
+function getScores() {
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(out) {
+      if (this.readyState === 4 && this.status === 200) {
+        console.log("Info sent");
+        leaders = JSON.parse(xhttp.responseText);
+        console.log(leaders);
+      }
+    };
+
+  xhttp.open("GET", "/records");
+  xhttp.setRequestHeader('Content-type', 'application/json');
+  xhttp.send();
+}
+
 function Driver(id, pos) {
   this.x = pos;
 
@@ -395,12 +433,112 @@ function Driver(id, pos) {
   }
 }
 
+function leaderboardScreen() {
+  getScores();
+
+  titleElem.remove();
+  startElem.remove();
+
+  leaderElem.position(width / 2 - 220, (height / 16) - 20);
+  leaderElem.style('font-size', 75 + 'px');
+
+  rankElem = createDiv('Rank');
+  rankElem.position(1 * (width / 7) + 50, 2 * (height / 12));
+  rankElem.id = 'rank';
+  rankElem.style('color', 'white');
+  rankElem.style('font-size', 50 + 'px');
+
+  nameElem = createDiv('Name');
+  nameElem.position(3 * (width / 7) + 50, 2 * (height / 12));
+  nameElem.id = 'name';
+  nameElem.style('color', 'white');
+  nameElem.style('font-size', 50 + 'px');
+
+  recordElem = createDiv('High Score');
+  recordElem.position(5 * (width / 7) + 50, 2 * (height / 12));
+  recordElem.id = 'record';
+  recordElem.style('color', 'white');
+  recordElem.style('font-size', 50 + 'px');
+
+  var i = 0;
+  var limit;
+  if(leaders.length < 10) {
+    limit = leaders.length;
+  }
+  else {
+    limit = 10;
+  }
+  while(i < limit) {
+    playersElem[i] = createDiv(leaders[leaders.length - (i + 1)].name);
+    playersElem[i].position(3 * (width / 7) + 50, 2 * (height / 12) + ((i + 2) * 40));
+    playersElem[i].id = 'player' + i;
+    playersElem[i].style('color', 'black');
+    playersElem[i].style('font-size', 35 + 'px');
+
+    positionsElem[i] = createDiv(i + 1);
+    positionsElem[i].position(1 * (width / 7) + 50, 2 * (height / 12) + ((i + 2) * 40));
+    positionsElem[i].id = 'position' + i;
+    positionsElem[i].style('color', 'black');
+    positionsElem[i].style('font-size', 35 + 'px');
+
+    highScoresEleme[i] = createDiv(leaders[leaders.length - (i + 1)].score);
+    highScoresEleme[i].position(5 * (width / 7) + 50, 2 * (height / 12) + ((i + 2) * 40));
+    highScoresEleme[i].id = 'highScore' + i;
+    highScoresEleme[i].style('color', 'black');
+    highScoresEleme[i].style('font-size', 35 + 'px');
+
+    i++;
+  }
+
+  backElem = createDiv('Back');
+  backElem.position(1 * (width / 7) + 50, 11 * (height / 12));
+  backElem.id = 'back';
+  backElem.style('color', 'white');
+  backElem.style('font-size', 50 + 'px');
+
+  leaderboardActive = true;
+}
+
 function mouseClicked() {
-  if ((mouseX > width / 2 - 50 /*&& mouseX < width / 2*/) && (mouseY > (3 * (height / 4)) /*&& mouseY < 3 * (height / 4) - 50*/)) {
+  if ((mouseX > width / 2 - 50 /*&& mouseX < width / 2*/) && (mouseY > (3 * (height / 4)) && mouseY < (7 * (height / 8)))) {
     titleElem.remove();
     startElem.remove();
+    leaderElem.remove();
     start = true;
     loop();
+  }
+  else if((mouseX > width / 2 - 130 /*&& mouseX < width / 2*/) && (mouseY > (7 * (height / 8)))) {
+    leaderboardScreen();
+  }
+  else if(((mouseX > 1 * (width / 7) + 50) && (mouseX < width / 2 - 130)) && (mouseY > 11 * (height / 12)) && leaderboardActive) {
+    leaderElem.remove();
+    rankElem.remove();
+    nameElem.remove();
+    recordElem.remove();
+    backElem.remove();
+    for(var i = 0; i < playersElem.length; i++) {
+      playersElem[i].remove();
+      positionsElem[i].remove();
+      highScoresEleme[i].remove();
+    }
+
+    titleElem = createDiv('Chicken Crossing');
+    titleElem.position(width / 3 - 50, (height / 4));
+    titleElem.id = 'title';
+    titleElem.style('color', 'white');
+    titleElem.style('font-size', 100 + 'px');
+
+    startElem = createDiv('Start');
+    startElem.position(width / 2 - 50, 3 * (height / 4));
+    startElem.id = 'start';
+    startElem.style('color', 'white');
+    startElem.style('font-size', 50 + 'px');
+
+    leaderElem = createDiv('Leaderboard');
+    leaderElem.position(width / 2 - 130, 7 * (height / 8));
+    leaderElem.id = 'leader';
+    leaderElem.style('color', 'white');
+    leaderElem.style('font-size', 50 + 'px');
   }
 }
 
