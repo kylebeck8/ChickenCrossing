@@ -574,11 +574,15 @@ function keyPressed() {
     case 68: //right
       chicken.position.x += widthElement/2;
       break;
-    case 83: //up
-      chicken.position.y += 64;
+    case 83: //down
+      if(chicken.position.y + 64 < height) {
+        chicken.position.y += 64;
+      }
       break;
-    case 87: //down
-      chicken.position.y -= 64;
+    case 87: //up
+      if(chicken.position.y - 64 > 0) {
+        chicken.position.y -= 64;
+      }
       break;
   }
   //return false;
