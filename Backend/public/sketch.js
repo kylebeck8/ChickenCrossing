@@ -6,11 +6,14 @@ var cars = [];
 
 var chicken;
 var scoreElem;
+var titleElem;
+var startElem;
 var maxScore;
 var collision;
 var input;
 var button;
 var prompt;
+var start;
 
 var widthElement;
 var mapXPos;
@@ -78,7 +81,7 @@ function draw() {
 
   drawSprites();
 
-  camera.position.x += 3;
+  camera.position.x += 2;
 
   //moves cars
   for (var i=0; i<cars.length; i++) {
@@ -100,7 +103,7 @@ function draw() {
     if(chicken.overlap(cars[i]) || chicken.position.x < camera.position.x - screen.width / 2) {
       noLoop();
       background(0);
-      var scoreVal = parseInt(scoreElem.html().substring(8));
+      var scoreVal = maxScore / (widthElement / 2) - 2;
       scoreElem.html('Game ended! Your score was : ' + scoreVal);
 
       input = createInput();
@@ -124,7 +127,26 @@ function draw() {
   //check score
   if(chicken.position.x > maxScore && !collision) {
     maxScore = chicken.position.x - 40;
-    scoreElem.html('Score = ' + maxScore / (widthElement / 2));
+    scoreElem.html('Score = ' + (maxScore / (widthElement / 2) - 2));
+  }
+
+  if(!start) {
+    fill(color(136, 180, 252));
+    rect(0, 0, width, height);
+
+    titleElem = createDiv('Chicken Crossing');
+    titleElem.position(width / 3 - 50, (height / 4));
+    titleElem.id = 'title';
+    titleElem.style('color', 'white');
+    titleElem.style('font-size', 100 + 'px');
+
+    startElem = createDiv('Start');
+    startElem.position(width / 2 - 50, 3 * (height / 4));
+    startElem.id = 'start';
+    startElem.style('color', 'white');
+    startElem.style('font-size', 50 + 'px');
+
+    noLoop()
   }
 }
 
@@ -249,6 +271,7 @@ function reset() {
 
   maxScore = 0;
   collision = false;
+  start = false;
   mapXPos = 0;
   gameMap = [1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1];
 
@@ -260,15 +283,15 @@ function reset() {
 
   driveUp = height;
   driveDown = -90;
-  yCor = height / 2;
-  xCor = 40;
   widthElement = roadPic.width/2;
   mapXPos = widthElement * 11;
+  yCor = height / 2;
+  xCor = 40 + widthElement;
 
   chicken.position.x = xCor;
   chicken.position.y = yCor;
 
-  camera.position.x = chicken.position.x + (screen.width / 2 - 100);
+  camera.position.x = chicken.position.x + (screen.width / 2 - 200);
   camera.position.y = chicken.position.y;
 
   drawSprites();
@@ -283,9 +306,10 @@ function sendScore() {
     };
 
   var name = input.value();
+  var score = maxScore / (widthElement / 2) - 2;
   const record = {
     name: name,
-    score: maxScore
+    score: score
   };
 
   xhttp.open("POST", "/records");
@@ -304,6 +328,15 @@ function Driver(id, pos) {
   }
   else {
     this.y = driveDown;
+  }
+}
+
+function mouseClicked() {
+  if ((mouseX > width / 2 - 50 /*&& mouseX < width / 2*/) && (mouseY > (3 * (height / 4)) /*&& mouseY < 3 * (height / 4) - 50*/)) {
+    titleElem.remove();
+    startElem.remove();
+    start = true;
+    loop();
   }
 }
 
