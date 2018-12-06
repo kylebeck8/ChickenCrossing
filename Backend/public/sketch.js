@@ -145,21 +145,62 @@ function checkLastThreeSpaces() {
 }
 
 function AddCars() {
-  direction.push(floor(random(0, 2)));
-  cars.push(new Driver(cars.length, mapXPos+widthElement/4));
-  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
-  if (direction[direction.length-1] == 0) {
-    cars[cars.length-1].addImage(carUpPic);
-  } else {
-    cars[cars.length-1].addImage(carDownPic);
+  //first section
+  var amount = floor(random(0, 4));
+  var carType = floor(random(0, 2));
+  var directionTemp = floor(random(0, 2));
+  var yOffset = 0;
+  for (var i=0; i<amount; i++) {
+    direction.push(directionTemp);
+    cars.push(new Driver(cars.length, mapXPos+widthElement/4));
+    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yOffset);
+    if (carType == 0) {
+      yOffset += 225;
+    } else {
+      yOffset += 150;
+    }
+    if (direction[direction.length-1] == 0) {
+      if (carType == 0) {
+        cars[cars.length-1].addImage(truckUpPic);
+      } else {
+        cars[cars.length-1].addImage(carUpPic);
+      }
+    } else {
+      if (carType == 0) {
+        cars[cars.length-1].addImage(truckDownPic);
+      } else {
+        cars[cars.length-1].addImage(carDownPic);
+      }
+    }
   }
-  direction.push(floor(random(0, 2)));
-  cars.push(new Driver(cars.length, mapXPos+widthElement*3/4));
-  cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
-  if (direction[direction.length-1] == 0) {
-    cars[cars.length-1].addImage(carUpPic);
-  } else {
-    cars[cars.length-1].addImage(carDownPic);
+
+  //second section
+  amount = floor(random(0, 4));
+  carType = floor(random(0, 2));
+  directionTemp = floor(random(0, 2));
+  yOffset = 0;
+  for (var i=0; i<amount; i++) {
+    direction.push(directionTemp);
+    cars.push(new Driver(cars.length, mapXPos+widthElement*3/4));
+    cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y + yOffset);
+    if (carType == 0) {
+      yOffset += 225;
+    } else {
+      yOffset += 150;
+    }
+    if (direction[direction.length-1] == 0) {
+      if (carType == 0) {
+        cars[cars.length-1].addImage(truckUpPic);
+      } else {
+        cars[cars.length-1].addImage(carUpPic);
+      }
+    } else {
+      if (carType == 0) {
+        cars[cars.length-1].addImage(truckDownPic);
+      } else {
+        cars[cars.length-1].addImage(carDownPic);
+      }
+    }
   }
 }
 
