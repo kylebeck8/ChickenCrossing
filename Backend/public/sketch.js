@@ -3,7 +3,7 @@ var yCor;
 var driveUp;
 var driveDown;
 var cars = [];
-var gameMap = [1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1];
+var direction = [];
 var chicken;
 var scoreElem;
 var maxScore;
@@ -14,6 +14,11 @@ var prompt;
 
 var widthElement;
 var mapXPos = 0;
+
+//0 is road, 1 is grass
+var gameMap = [1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1];
+//0 is up, 1 is down. Is in sync with cars[]
+var direction = [];
 
 const url = "http://10.186.135.169:8080/records";
 
@@ -43,18 +48,6 @@ function setup() {
   chicken = createSprite(xCor, yCor, chickenPic.width * 1.5, chickenPic.height * 1.5);
   chicken.addImage(chickenPic);
 
-  /*for(var i = 0; i < 30; i++) {
-    cars.push(new Driver(i));
-    cars[i] = createSprite(cars[i].x, cars[i].y);
-    if(cars[i].position.x % 100 == 0) {
-      cars[i].addImage(carUpPic);
-    }
-    else {
-      cars[i].addImage(carDownPic);
-    }
-
-  } */
-
   camera.position.x = chicken.position.x + 250;
   camera.position.y = chicken.position.y;
 
@@ -65,11 +58,8 @@ function draw() {
   // put drawing code here
   background(0);
 
-  //add roads
+  //add roads and cars
   if ((camera.position.x + width) > mapXPos) {
-    //console.log(camera.position.x);
-    //console.log(width);
-    //console.log(mapXPos);
     for (var i=0; i<2; i++) {
       var tile = int(random(1,11))
       if (gameMap[gameMap.length - 1] == 1) {
@@ -84,6 +74,7 @@ function draw() {
       mapXPos += widthElement;
     }
   }
+
   //display map
   for (var i=0; i<gameMap.length; i++) {
     if (gameMap[i] == 0) {
@@ -95,18 +86,18 @@ function draw() {
 
   drawSprites();
 
-  camera.position.x += 3 /*chicken.position.x + 250*/;
+  camera.position.x += 1 /*chicken.position.x + 250*/;
 
   //moves cars
   for (var i=0; i<cars.length; i++) {
-    if(cars[i].position.x % 100 == 0) {
+    if(direction[i] == 0) {
       cars[i].velocity.y = -2;
     }
     else {
       cars[i].velocity.y = 2;
     }
 
-    if(cars[i].position.x % 100 == 0 && cars[i].position.y < -90) {
+    if(direction[i] == 0 && cars[i].position.y < -90) {
       cars[i].position.y = height;
     }
     else if(cars[i].position.x % 100 != 0 && cars[i].position.y > height) {
@@ -114,7 +105,7 @@ function draw() {
     }
 
     //check collisions
-    if(chicken.overlap(cars[i]) || chicken.position.x < camera.position.x - 350) {
+    if(chicken.overlap(cars[i]) || chicken.position.x < camera.position.x - 700) {
       noLoop();
       var scoreVal = parseInt(scoreElem.html().substring(8));
       scoreElem.html('Game ended! Your score was : ' + scoreVal);
@@ -143,12 +134,22 @@ function draw() {
 }
 
 function AddCars() {
+  direction.push(floor(random(0, 2)));
   cars.push(new Driver(cars.length, mapXPos+widthElement/4));
   cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
-  cars[cars.length-1].addImage(carDownPic);
+  if (direction[direction.length-1] == 0) {
+    cars[cars.length-1].addImage(carUpPic);
+  } else {
+    cars[cars.length-1].addImage(carDownPic);
+  }
+  direction.push(floor(random(0, 2)));
   cars.push(new Driver(cars.length, mapXPos+widthElement*3/4));
   cars[cars.length-1] = createSprite(cars[cars.length-1].x, cars[cars.length-1].y);
-  cars[cars.length-1].addImage(carDownPic);
+  if (direction[direction.length-1] == 0) {
+    cars[cars.length-1].addImage(carUpPic);
+  } else {
+    cars[cars.length-1].addImage(carDownPic);
+  }
 }
 
 function DisplayMapElement(element, location) {
@@ -194,7 +195,7 @@ function sendScore() {
 function Driver(id, pos) {
   this.x = pos;
 
-  if(this.x % 100 == 0) {
+  if(direction[direction.length-1] == 0) {
     this.y = driveUp;
   }
   else {
